@@ -1,5 +1,6 @@
 project:
-  title: "palaeoverse_demo"
+  title: "presentation"
+  output-dir: "../docs"
 
 editor: source
 
