@@ -7,11 +7,12 @@ format:
   html:
     html-math-method: katex
     code-tools: true
-    self-contained: true
+    self-contained: false
     linkcolor: "#800080"
 execute:
   warning: false
-  eval: true
+  eval: false
+  message: false
 ---
 
 # Introduction
