@@ -46,7 +46,7 @@ format:
 :::
 
 ::: notes
-Before I jump into the presentation, I wanted to first note that the development of the palaeoverse R package was by no means a solo-effort. All of these fantastic people had a hand in getting it together.
+Before I jump into the presentation, I wanted to first note that the development of the palaeoverse R package was by no means a solo-effort. All of these fantastic people had a hand in getting it together and form the core team behind the Palaeoverse project.
 :::
 
 ## Funders {.smaller}
@@ -86,7 +86,7 @@ I would also like to say thank you to all our funding bodies which supported our
 </center>
 
 ::: notes
-So, what exactly is palaeoverse? Well, the palaeoverse project aims to bring the palaeobiology community together through various means. The overall intention is to encourage the field to work more closely together rather than in competition. We believe this to be a critical step in improving research as a working environment, but also for the progress of the field.
+So, what exactly is palaeoverse? Well, the Palaeoverse project aims to bring the palaeobiology community together through various means. The overall intention is to encourage the field to work more closely together rather than in competition. We believe this to be a critical step in improving research as a working environment, but also for the progress of the field.
 :::
 
 ## What is the palaeoverse R package? {.smaller}
@@ -106,9 +106,9 @@ So, what exactly is palaeoverse? Well, the palaeoverse project aims to bring the
 ::: notes
 One such effort on this front is the palaeoverse R package.
 
-R and R packages are an integral part of quantitative research in palaeobiology today, with R code frequently used for data cleaning, analyses and data visualisation. In palaeobiology, these tools are frequently borrowed or repurposed from ecology (e.g. vegan and iNEXT). While packages exist to support fossil data analyses (e.g. claddis and divDyn), there is a lack of packages to support fossil data preparation or exploration. This results in the community often producing their own custom scripts.
+R and R packages are an integral part of quantitative research in palaeobiology today, with R code frequently used for data cleaning, analyses, and data visualisation. In palaeobiology, these tools are frequently borrowed or repurposed from ecology (e.g. vegan and iNEXT). While packages exist to support fossil data analyses (e.g. claddis and divDyn), there is a lack of packages to support fossil data preparation or exploration. This results in the community often producing their own custom scripts.
 
-The palaeoverse package provides auxiliary functions to support data preparation and exploration, with the intention of improving code readability, reusability and reproducibility.
+The palaeoverse package provides auxiliary functions to support data preparation and exploration, with the intention of improving code readability, reusability, and reproducibility.
 :::
 
 ## What makes palaeoverse different? {.smaller}
@@ -252,7 +252,7 @@ library(palaeoverse)
 :::
 
 ::: notes
-I am pleased to say that since Monday, palaeoverse has been available on CRAN and can be installed using the default install.packages function. The development version can be installed using the devtools (or remotes) package. Once installed, the package can be loaded in the usual manner.
+palaeoverse is available on CRAN and can be installed using the default install.packages function. The development version can be installed using the devtools (or remotes) package. Once installed, the package can be loaded in the usual manner.
 :::
 
 ## Example datasets {.smaller}
@@ -353,7 +353,7 @@ head(bins, n = 3)
 ```
 
 ::: notes
-First up, we have the time bins function, which can be used to extract time bins based on the Geological Time Scale. The user can request different ranks of intervals such as stage, period, epoch, etc. The user can also call intervals based on interval names or an age range and plot the time bins if desired.
+The user can also call time scales from Macrostrat. 
 :::
 
 ## Near-equal-length time bins {.smaller}
@@ -374,7 +374,7 @@ head(bins, n = 3)
 ```
 
 ::: notes
-In the previous slide, you probably noticed from the plot that stratigraphic time bins can be extremely uneven in duration. Previous studies have tried to circumvent this by grouping stages together towards a target bin size to try and even out temporal duration for conducting analyses. palaeoverse provides an implementation of this that can be defined by the size argument.
+In the previous slides, you probably noticed from the plots that time bins (e.g. stratigraphic stages) can be extremely uneven in duration. Previous studies have tried to circumvent this by grouping intervals together towards a target bin size to try and even out temporal duration for conducting analyses. palaeoverse provides an implementation of this that can be defined by the size argument.
 :::
 
 ## Temporal occurrence binning {.smaller}
@@ -473,7 +473,7 @@ Functionality is also provided to bin data spatially using a geospatial indexing
 
 ## Palaeogeographic reconstruction {.smaller}
 
-Palaeorotate fossil occurrences (eight models available):
+Palaeorotate fossil occurrences (multiple models available):
 
 ```{r}
 #| collapse: true
@@ -498,7 +498,7 @@ head(ex3)
 ```
 
 ::: notes
-In order to study the past distribution of taxa, the palaeogeographic position of fossil occurrences need to be reconstructed using plate rotation models. The palaeorotate function provides two methods to reconstruct palaeocoordinates for fossil occurrences. The first method, "point", uses the GPlates Web Service, which estimates palaeocoordinates for point data, with eight different models available. The second method, "grid", uses pre-generated reconstruction files of a 1° x 1° grid to estimate palaeocoordinates. This approach is much faster than the point method for large datasets, and also allows easy exploration. Additional functionality for the second method allows the user to calculate the palaeogeographic uncertainty in reconstructions from across the eight available models with the palaeolatitudinal range and maximum circle distance between points calculated.
+In order to study the past distribution of taxa, the palaeogeographic position of fossil occurrences need to be reconstructed using plate rotation models. The palaeorotate function provides two methods to reconstruct palaeocoordinates for fossil occurrences. The first method, "point", uses the GPlates Web Service, which estimates palaeocoordinates for point data, with eight different models available. The second method, "grid", uses pre-generated reconstruction files to estimate palaeocoordinates. This approach is much faster than the point method for large datasets, and also allows easy exploration. Additional functionality for the second method allows the user to calculate the palaeogeographic uncertainty in reconstructions from across the eight available models with the palaeolatitudinal range and maximum circle distance between points calculated.
 :::
 
 ## Taxonomic spell check {.smaller}
@@ -686,7 +686,7 @@ head(ex1)
 :::
 
 ::: notes
-We don't currently have much functionality for working with phylogenies, but one function that several members of the team felt would be useful is the ability to compare a list of taxonomic names to tip names in a user-provided phylogeny. As you can, this is what the phylo check function does. Further functionality allows the user to also trim a phylogeny based on the input list.
+We don't currently have much functionality for working with phylogenies, but one function that several members of the team felt would be useful is the ability to compare a list of taxonomic names to tip names in a user-provided phylogeny. As you can, this is what the phylo_check function does. Further functionality allows the user to also trim a phylogeny based on the input list.
 :::
 
 ## Interval linking {.smaller}
@@ -720,7 +720,7 @@ occdf <- look_up(occdf,
 ```
 
 ::: notes
-A common difficultly faced by palaeobiologists is that temporal information associated with fossil occurrences is often asynchronous, and not directly comparable. Temporal data might be provided as either character-based interval names or numeric ages, and might conform to different timescales. The look up function is provided to help assign a common timescale. The function can be used to generate numeric ages from GTS interval names or an interval key can be provided by the user to link interval names to the Geological Time Scale. This interval key consist of three columns with the first containing the interval name followed by the early and late international stage the interval name correlates with. Interval key is provided an example dataset in palaeoverse.
+A common difficultly faced by palaeobiologists is that temporal information associated with fossil occurrences is often asynchronous, and not directly comparable. Temporal data might be provided as either character-based interval names or numeric ages, and might conform to different timescales. The look_up function is provided to help assign a common timescale. The function can be used to generate numeric ages from GTS interval names or an interval key can be provided by the user to link interval names to the Geological Time Scale. This interval key consist of three columns with the first containing the interval name followed by the early and late international stage the interval name correlates with. Interval key is provided an example dataset in palaeoverse.
 :::
 
 ## Plotting {.smaller}
@@ -742,7 +742,7 @@ axis_geo(side = 1, intervals = "periods")
 ```
 
 ::: notes
-A common request from our survey participants was the ability to add the Geological Time Scale to a base R plot. The axis geo function in palaeoverse can be used to do just that.
+A common request from our survey participants was the ability to add the Geological Time Scale to a base R plot. The axis_geo function in palaeoverse can be used to do just that.
 :::
 
 ## Wrapper {.smaller}
@@ -777,7 +777,7 @@ ex3 <- group_apply(occdf = occdf,
 ```
 
 ::: notes
-As with most fields, we often want to analyse our data in groups. In palaeoverse, we provide the function group apply as a wrapper function to run functions over groups of data. For example, if we want to calculate the number of occurrences per country in this example, or use the function tax unique per collection in this example. The group apply function also allows the user to run function over multiple grouping variables, for example in the third example we calculate the number of occurrences per unique collection and geological formation combination.
+As with most fields, we often want to analyse our data in groups. In palaeoverse, we provide the function group_apply as a wrapper function to run functions over groups of data. For example, if we want to calculate the number of occurrences per country in this example, or use the function tax unique per collection in this example. The group apply function also allows the user to run function over multiple grouping variables, for example in the third example we calculate the number of occurrences per unique collection and geological formation combination.
 :::
 
 # What's next? {.smaller}
@@ -790,7 +790,7 @@ So, that's it on current functionality. I appreciate that was slapdash introduct
 
 ## What's next? {.smaller}
 
-![](images/delorean.png){.absolute top="50" right="50" width="450" height="450"}
+![](images/logo.png){.absolute top="50" right="50" height="50%"}
 
 ::: fragment
 -   Palaeobiology CRAN Task View
