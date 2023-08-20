@@ -11,8 +11,7 @@ format:
     linkcolor: "#800080"
 execute:
   warning: false
-  eval: false
-  message: false
+  eval: true
 ---
 
 # Introduction
@@ -23,8 +22,8 @@ execute:
 
 The `palaeoverse` package can be installed via CRAN or its dedicated [GitHub repository](https://github.com/palaeoverse-community/palaeoverse) if the development version is preferred. To install via the CRAN, simply use:
 
-```{r install}
-install.packages("palaeoverse", repos = "http://cran.us.r-project.org")
+```{r eval=FALSE}
+install.packages("palaeoverse")
 ```
 
 To install the development version, first install the `devtools` package, and then use `install_github` to install `palaeoverse` directly from GitHub.
