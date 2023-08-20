@@ -11,7 +11,7 @@ format:
     linkcolor: "#800080"
 execute:
   warning: false
-  eval: false
+  eval: true
 ---
 
 # Introduction
@@ -22,26 +22,26 @@ execute:
 
 The `palaeoverse` package can be installed via CRAN or its dedicated [GitHub repository](https://github.com/palaeoverse-community/palaeoverse) if the development version is preferred. To install via the CRAN, simply use:
 
-```{r}
-install.packages("palaeoverse")
+```{r install}
+install.packages("palaeoverse", repos = "http://cran.us.r-project.org")
 ```
 
 To install the development version, first install the `devtools` package, and then use `install_github` to install `palaeoverse` directly from GitHub.
 
-```{r}
+```{r eval=FALSE}
 install.packages("devtools")
 devtools::install_github("palaeoverse-community/palaeoverse")
 ```
 
 You can now load `palaeoverse` using the default `library` function:
 
-```{r}
+```{r load}
 library(palaeoverse)
 ```
 
 **Before we get onto the good stuff, the development team has a small request**. If you use `palaeoverse` in your research, please cite the associated publication. This will help us to continue our work in supporting you to do yours. You can access the appropriate citation via:
 
-```{r}
+```{r citation}
 citation("palaeoverse")
 ```
 
@@ -49,7 +49,7 @@ citation("palaeoverse")
 
 Functions in `palaeoverse` are designed around the assumption that most users' data are stored in an occurrence `data.frame`. As such, this is the expected input data format for most functions. We provide two example occurrence datasets (`tetrapods` and `reefs`) within the package from different data sources. In this vignette, we will focus on the `reefs` dataset which is a compilation of Phanerozoic reef occurrences (*n* = 4,363) from the [PaleoReefs Database](https://www.paleo-reefs.pal.uni-erlangen.de) (Kiessling & Krause, 2022).
 
-```{r}
+```{r view}
 # Load the dataset
 data(reefs)
 # View the first five rows & columns of reefs
@@ -66,7 +66,7 @@ In this example, we will use the `reefs` dataset to examine latitudinal trends i
 
 Let's start by exploring the dataset. Before conducting any analyses, it is always a good idea to explore your data and understand what you are working with. Details related to the example datasets can be accessed via the usual documentation call:
 
-```{r}
+```{r help}
 # Call documentation for dataset
 ?reefs
 # You can also use
@@ -75,7 +75,7 @@ help(reefs)
 
 Let's start by exploring the data a little:
 
-```{r}
+```{r nrow}
 # How many reefs are there in the dataset?
 # Each row represents an individual reef.
 nrow(reefs)
@@ -84,7 +84,7 @@ nrow(reefs)
 Not bad (*n* = 4363), that's quite a bit of data to play with! Remember that these are reefs (whole ecosystems), not individual occurrences of fossil organisms like in `tetrapods`. But how much does this vary across time? We can make use of the `group_apply` wrapper function to run a function across subsets of data.
 
 
-```{r}
+```{r counts}
 # How many reefs per interval?
 # Let's group by the interval column to test
 reef_counts <- group_apply(occdf = reefs, group = "interval", fun = nrow)
@@ -93,7 +93,7 @@ head(reef_counts)
 
 Oh dear, we've just hit a common issue... our reef data does not conform to a common time scale! Some reefs are resolved to stage level, while others are resolved to a coarser or finer temporal resolution. In some instances, regional names are also used, while international names are used in others. This makes it challenging to make comparisons through time... one solution could be to use age values to bin the reefs into time bins, but no age range data is provided in the dataset (i.e. "max_ma" and "min_ma"). We must therefore use the names of each interval to link to a common time scale, the '[International Geological Stages](https://stratigraphy.org/chart)' established by the International Commission on Stratigraphy (ICS). Fortunately, we can make use of the `look_up` function to do so. This function can be used to assign international geological stages and numeric ages to occurrences, or use a user-defined interval key to link to a common time scale. Here, we will use the example `interval_key` available in `palaeoverse` to assign international geological stage names and numeric ages.
 
-```{r}
+```{r lookup}
 # Load the interval key
 data("interval_key")
 # Assign a common time scale based on an interval key
@@ -107,7 +107,7 @@ reefs[100:110, 15:19]
 
 Great! We now have a common time scale and numeric ages. However, some of our reefs seem to range through several stages and we can't count just by the early or late stage. Our data still need to be binned. Let's check out the `time_bins` and `bin_time` functions.
 
-```{r}
+```{r timebins}
 # Now we have numeric ages for our data, we can easily
 # remove pre-Phanerozoic data to focus our study
 reefs <- subset(reefs, interval_max_ma <= 541)
@@ -121,7 +121,7 @@ colnames(reefs)[which(colnames(reefs) == "interval_min_ma")] <- "min_ma"
 ```
 
 
-```{r}
+```{r bintime}
 # Five methods exist in bin_time for binning occurrence data
 # You can see details on each via ?bin_time
 # Bin by midpoint age
@@ -137,7 +137,7 @@ bin_time(occdf = reefs, bins = bins, method = "point", reps = 10)
 ```
 
 
-```{r}
+```{r binning}
 # Let's go with "all" for this example!
 reefs <- bin_time(occdf = reefs, bins = bins, method = "all")
 ```
@@ -146,7 +146,7 @@ Note that the number of rows of `reefs` have now increased. This is because the 
 
 Let's check those reef numbers through time again using our binned data:
 
-```{r}
+```{r groupapply}
 # Count number of occurrences per interval
 reefs_time <- group_apply(occdf = reefs, group = "interval_mid_ma", fun = nrow)
 # Check output
@@ -156,7 +156,7 @@ head(reefs_time)
 That's more like it! But, let's not forget it's always useful to visualise our data. Why don't we plot the number of reefs through time? We can even make use of the `axis_geo` function to add the Geological Time Scale to our plot.
 
 
-```{r}
+```{r plotcounts}
 # Plot data
 plot(x = reefs_time$interval_mid_ma,
      y = reefs_time$nrow,
@@ -169,28 +169,26 @@ plot(x = reefs_time$interval_mid_ma,
 axis_geo(side = 1, intervals = "periods")
 ```
 
-<img src="n-reef-1.png" alt="plot of chunk n-reef" width="100%" />
-
 You would (and should) of course want to explore your data a little more than this. However, for the sake of brevity, let's focus on our research theme: latitudinal trends in Phanerozoic reefs.
 
 When studying modern latitudinal trends (e.g. in biodiversity), researchers can use the geographic coordinates of their samples to conduct analyses. However, as the continents shift through time, palaeobiologists must reconstruct the palaeogeographic coordinates of fossil localities. To do so, plate rotation models are used (e.g. the PALEOMAP model) to rotate the modern coordinates of fossil localities to their location at time of deposition. The `palaeorotate` function allows the user to do so using either the 'point' or 'grid' method. The first approach makes use of the GPlates Web Service and allows point data to be rotated to specific ages using the available models (see <https://gwsdoc.gplates.org>). The second approach uses reconstruction files of pre-generated palaeocoordinates to spatiotemporally link occurrences' modern coordinates and age estimates with their respective palaeocoordinates. Let's give it a shot:
 
 
-```{r}
+```{r palaeorot}
 # Palaeorotate occurrences
 reefs <- palaeorotate(occdf = reefs, age = "bin_midpoint",
                       method = "point", model = "PALEOMAP")
 ```
 
 
-```{r}
+```{r checkpcoords}
 # Check palaeocoordinates
 head(reefs[, c("p_lng", "p_lat")])
 ```
 
 Now let's plot that palaeolatitudinal distribution!
 
-```{r}
+```{r plotplat}
 # Plot data
 plot(x = reefs$bin_midpoint,
      y = reefs$p_lat,
@@ -202,12 +200,9 @@ plot(x = reefs$bin_midpoint,
 axis_geo(side = 1, intervals = "periods")
 ```
 
-<img src="reefs-dist-1.png" alt="plot of chunk reefs-dist" width="100%" />
-
 Neat! But it's hard to draw any trends from this data (there is a lot of it!). We can do better... let's summarise this information... if we assume that reefs are broadly limited to tropical and subtropical climatic conditions, the most poleward reef in each time bin should give us an estimate of the palaeolatitudinal extent of these climatic conditions.
 
-
-```{r}
+```{r plotmaxlat}
 # Let's first assume hemispheric symmetry and convert
 # palaeolatitudes to absolute palaeolatitudes
 reefs$p_lat <- abs(reefs$p_lat)
@@ -231,12 +226,10 @@ plot(x = midpoints,
 axis_geo(side = 1, intervals = "periods")
 ```
 
-<img src="reefs-max-1.png" alt="plot of chunk reefs-max" width="100%" />
-
 That's definitely much clearer! Should we stop there? Well... how about one last thing... let's consider how plate rotation model choice might impact these results using three different models: GOLONKA, PALEOMAP, and MERDITH2021 (Wright et al. 2013; Scotese & Wright, 2018; Merdith et al. 2021).
 
 
-```{r}
+```{r palrotmult}
 # We can call multiple models at once with palaeorotate
 # First, let's define the models...
 models <- c("GOLONKA", "PALEOMAP", "MERDITH2021")
@@ -246,7 +239,7 @@ reefs <- palaeorotate(occdf = reefs, age = "bin_midpoint",
 ```
 
 
-```{r}
+```{r checkpcoords2}
 # Check palaeocoordinates
 # When multiple models are called, the name of the model
 # is added as a suffix to p_lng and p_lat
@@ -257,8 +250,7 @@ head(reefs[, c("p_lng_PALEOMAP", "p_lat_PALEOMAP",
 
 Now we've palaeorotated our data, let's repeat what we did earlier and calculate the most poleward reef occurrence for each model.
 
-
-```{r}
+```{r maxplat}
 # Let's code a little helper function to begin with.
 # This is generally useful when repeating code several times!
 p_lat_max <- function(occdf, midpoint, p_lat) {
@@ -307,8 +299,6 @@ legend(530, 15, legend=c("PALEOMAP", "GOLONKA", "MERDITH2021"),
 # Add geological time scale axis
 axis_geo(side = 1, intervals = "periods")
 ```
-
-<img src="reefs-max-multi-1.png" alt="plot of chunk reefs-max-multi" width="100%" />
 
 We will leave you to make your own conclusions...
 
